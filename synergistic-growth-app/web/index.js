@@ -5,7 +5,7 @@ import express from "express";
 import serveStatic from "serve-static";
 
 import shopify from "./shopify.js";
-import GDPRWebhookHandlers from "./gdpr.js";
+import webhookHandlers from "./webhook-handlers.js";
 import applyQrCodeApiEndpoints from "./middleware/qr-code-api.js";
 import applyQrCodePublicEndpoints from "./middleware/qr-code-public.js";
 
@@ -30,7 +30,7 @@ app.get(
 );
 app.post(
   shopify.config.webhooks.path,
-  shopify.processWebhooks({ webhookHandlers: GDPRWebhookHandlers })
+  shopify.processWebhooks({ webhookHandlers })
 );
 
 // If you are adding routes outside of the /api path, remember to
@@ -40,7 +40,6 @@ app.use("/api/*", shopify.validateAuthenticatedSession());
 applyQrCodeApiEndpoints(app);
 
 app.use(express.json());
-
 
 app.use(shopify.cspHeaders());
 app.use(serveStatic(STATIC_PATH, { index: false }));
