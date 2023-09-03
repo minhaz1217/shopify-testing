@@ -136,7 +136,7 @@ export function QRCodeForm({ QRCode: InitialQRCode }) {
 
     Finally, closes the ResourcePicker.
   */
-  const handleProductChange = useCallback(({ selection }) => {
+  const handleProductChange = useCallback(async ({ selection }) => {
     setSelectedProduct({
       title: selection[0].title,
       images: selection[0].images,
@@ -161,10 +161,12 @@ export function QRCodeForm({ QRCode: InitialQRCode }) {
 
     It switches between a show and hide state.
   */
-  const toggleResourcePicker = useCallback(
-    () => setShowResourcePicker(!showResourcePicker),
-    [showResourcePicker]
-  );
+  const toggleResourcePicker = useCallback(async () => {
+    console.debug('Clicked');
+    const selected = await shopify.resourcePicker({ type: "product" });
+    console.debug("AFTER ", selected);
+    // setShowResourcePicker(!showResourcePicker);
+  }, [showResourcePicker]);
 
   const [isDeleting, setIsDeleting] = useState(false);
   const deleteQRCode = useCallback(async () => {
